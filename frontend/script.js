@@ -3,13 +3,77 @@ let spent = 0;
 const creditHistory = [];
 const debitHistory = [];
 
+// Toast notification function
+function showToast(type, message) {
+  const toastContainer = document.getElementById("toastContainer");
+  const toastId = "toast-" + Date.now();
+
+  const toast = document.createElement("div");
+  toast.className = `toast toast-${type} show`;
+  toast.id = toastId;
+  toast.setAttribute("role", "alert");
+  toast.setAttribute("aria-live", "assertive");
+  toast.setAttribute("aria-atomic", "true");
+
+  const toastHeader = document.createElement("div");
+  toastHeader.className = "toast-header";
+
+  const strong = document.createElement("strong");
+  strong.className = "me-auto";
+  strong.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+
+  const closeBtn = document.createElement("button");
+  closeBtn.type = "button";
+  closeBtn.className = "btn-close";
+  closeBtn.setAttribute("data-bs-dismiss", "toast");
+  closeBtn.setAttribute("aria-label", "Close");
+
+  toastHeader.appendChild(strong);
+  toastHeader.appendChild(closeBtn);
+
+  const toastBody = document.createElement("div");
+  toastBody.className = "toast-body";
+  toastBody.textContent = message;
+
+  toast.appendChild(toastHeader);
+  toast.appendChild(toastBody);
+
+  toastContainer.appendChild(toast);
+
+  // Auto-remove toast after 5 seconds
+  setTimeout(() => {
+    toast.classList.add("hide");
+    setTimeout(() => {
+      toast.remove();
+    }, 300);
+  }, 5000);
+
+  // Manual close
+  closeBtn.addEventListener("click", () => {
+    toast.classList.add("hide");
+    setTimeout(() => {
+      toast.remove();
+    }, 300);
+  });
+}
+
 function login() {
   const name = document.getElementById("nameBox").value;
   if (name.trim() !== "") {
     document.getElementById("usernameDisplay").innerText = name;
     document.getElementById("appArea").style.display = "block";
     document.getElementById("loginpage").style.display = "none";
+    showToast("success", `Welcome back, ${name}!`);
+  } else {
+    showToast("error", "Please enter your name!");
   }
+}
+
+function logout() {
+  document.getElementById("appArea").style.display = "none";
+  document.getElementById("loginpage").style.display = "flex";
+  document.getElementById("nameBox").value = "";
+  showToast("success", "Logged out successfully");
 }
 
 function creditbtn() {
@@ -42,6 +106,9 @@ function addMoney() {
     document.getElementById("cashInAmount").value = "";
     document.getElementById("creditbtn").style.display = "none";
     renderTables();
+    showToast("success", `Successfully credited Rs.${amount}`);
+  } else {
+    showToast("error", "Please fill all fields with valid values!");
   }
 }
 
@@ -61,8 +128,12 @@ function spendMoney() {
     document.getElementById("cashOutAmount").value = "";
     document.getElementById("debitbtn").style.display = "none";
     renderTables();
+    showToast("success", `Successfully debited Rs.${amount}`);
   } else {
-    alert("Not enough money or invalid input!");
+    showToast(
+      "error",
+      amount > balance ? "Not enough money!" : "Invalid input!"
+    );
   }
 }
 
@@ -105,6 +176,7 @@ function filterByDate(arr, from, to) {
 
 function filterHistory() {
   renderTables(true);
+  showToast("success", "History filtered successfully");
 }
 
 function downloadPDF() {
@@ -142,6 +214,16 @@ function downloadPDF() {
   doc.text(`Total Debited: Rs.${debitTotal}`, 10, y);
 
   doc.save("history.pdf");
+  showToast("success", "PDF downloaded successfully");
+}
+
+function showClearConfirmation() {
+  const modal = new bootstrap.Modal(document.getElementById("confirmModal"));
+  document.getElementById("confirmClear").onclick = function () {
+    clearAll();
+    modal.hide();
+  };
+  modal.show();
 }
 
 function clearAll() {
@@ -152,4 +234,5 @@ function clearAll() {
   document.getElementById("balance").innerText = "0";
   document.getElementById("spent").innerText = "0";
   renderTables();
+  showToast("success", "All data has been cleared");
 }

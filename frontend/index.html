@@ -1,140 +1,226 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Simple Money Tracker</title>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Bootstrap 5 CSS CDN -->
+    <title>Simple Money Tracker</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div id="loginpage" class="section text-center">
-      <h2>Login</h2>
-      <input
-        id="nameBox"
-        class="form-control my-2"
-        placeholder="Enter your name"
-      />
-      <button class="btn btn-primary" onclick="login()">Login</button>
-    </div>
-
-    <div id="appArea" class="section" style="display: none">
-      <h2 class="text-center">Hello <span id="usernameDisplay"></span>!</h2>
-
-      <div class="alert alert-info text-center">
-        <p class="mb-1">
-          Your Balance is: <strong>Rs.<span id="balance">0</span></strong>
-        </p>
-        <p class="mb-0">
-          You spent: <strong>Rs.<span id="spent">0</span></strong>
-        </p>
-      </div>
-
-      <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
-        <button class="btn btn-success" onclick="creditbtn()">Credit</button>
-        <button class="btn btn-warning text-white" onclick="debitbtn()">
-          Debit
-        </button>
-        <button class="btn btn-secondary" onclick="showHistory()">
-          View History
-        </button>
-      </div>
-
-      <div id="creditbtn" class="card p-3 mb-3">
-        <input id="cashIndate" type="date" class="form-control mb-2" />
-        <input id="cashInReason" placeholder="Why?" class="form-control mb-2" />
-        <input
-          id="cashInAmount"
-          placeholder="Amount"
-          class="form-control mb-2"
-          type="number"
-        />
-        <button class="btn btn-success" onclick="addMoney()">Add</button>
-      </div>
-
-      <div id="debitbtn" class="card p-3 mb-3">
-        <input id="cashOutdate" type="date" class="form-control mb-2" />
-        <input
-          id="cashOutReason"
-          placeholder="Why?"
-          class="form-control mb-2"
-        />
-        <input
-          id="cashOutAmount"
-          placeholder="Amount"
-          class="form-control mb-2"
-          type="number"
-        />
-        <button class="btn btn-warning text-white" onclick="spendMoney()">
-          Spend
-        </button>
-      </div>
-
-      <div id="historySection" style="display: none">
-        <h3>History</h3>
-        <div class="row g-2 align-items-end">
-          <div class="col-md-6">
-            <label for="fromDate">From:</label>
-            <input type="date" id="fromDate" class="form-control" />
+    <div class="app-container">
+      <!-- Login Section -->
+      <div id="loginpage" class="login-section">
+        <div class="login-card">
+          <h2 class="text-center mb-4">Welcome</h2>
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="nameBox"
+              placeholder="Enter your name"
+            />
+            <label for="nameBox">Your Name</label>
           </div>
-          <div class="col-md-6">
-            <label for="toDate">To:</label>
-            <input type="date" id="toDate" class="form-control" />
+          <button class="btn btn-primary w-100 py-2" onclick="login()">
+            <i class="fas fa-sign-in-alt me-2"></i>Login
+          </button>
+        </div>
+      </div>
+
+      <!-- App Section -->
+      <div id="appArea" class="app-section">
+        <header class="app-header">
+          <h2>Hello <span id="usernameDisplay"></span>!</h2>
+          <button class="btn btn-sm btn-outline-secondary" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </header>
+
+        <div class="balance-card">
+          <div class="balance-item">
+            <span>Balance</span>
+            <strong>Rs.<span id="balance">0</span></strong>
+          </div>
+          <div class="balance-item">
+            <span>Spent</span>
+            <strong>Rs.<span id="spent">0</span></strong>
           </div>
         </div>
-        <div class="my-3">
-          <button
-            class="btn btn-outline-primary me-2"
-            onclick="filterHistory()"
-          >
-            Filter
+
+        <div class="action-buttons">
+          <button class="btn btn-success" onclick="creditbtn()">
+            <i class="fas fa-plus-circle me-2"></i>Credit
           </button>
-          <button class="btn btn-outline-danger" onclick="downloadPDF()">
-            Download PDF
+          <button class="btn btn-warning" onclick="debitbtn()">
+            <i class="fas fa-minus-circle me-2"></i>Debit
+          </button>
+          <button class="btn btn-info" onclick="showHistory()">
+            <i class="fas fa-history me-2"></i>History
           </button>
         </div>
 
-        <div class="row">
-          <div class="col-md-6">
-            <h4>Credited</h4>
-            <table class="table table-bordered table-striped">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Reason</th>
-                  <th>Amount</th>
-                </tr>
-              </thead>
-              <tbody id="creditBody"></tbody>
-            </table>
+        <!-- Credit Form -->
+        <div id="creditbtn" class="form-card">
+          <h5 class="form-title">
+            <i class="fas fa-money-bill-wave me-2"></i>Add Money
+          </h5>
+          <input type="date" id="cashIndate" class="form-control mb-3" />
+          <input
+            type="text"
+            id="cashInReason"
+            placeholder="Reason"
+            class="form-control mb-3"
+          />
+          <input
+            type="number"
+            id="cashInAmount"
+            placeholder="Amount"
+            class="form-control mb-3"
+          />
+          <button class="btn btn-success w-100" onclick="addMoney()">
+            <i class="fas fa-check me-2"></i>Add
+          </button>
+        </div>
+
+        <!-- Debit Form -->
+        <div id="debitbtn" class="form-card">
+          <h5 class="form-title">
+            <i class="fas fa-shopping-cart me-2"></i>Spend Money
+          </h5>
+          <input type="date" id="cashOutdate" class="form-control mb-3" />
+          <input
+            type="text"
+            id="cashOutReason"
+            placeholder="Reason"
+            class="form-control mb-3"
+          />
+          <input
+            type="number"
+            id="cashOutAmount"
+            placeholder="Amount"
+            class="form-control mb-3"
+          />
+          <button class="btn btn-warning w-100" onclick="spendMoney()">
+            <i class="fas fa-check me-2"></i>Spend
+          </button>
+        </div>
+
+        <!-- History Section -->
+        <div id="historySection" class="history-section">
+          <div class="history-header">
+            <h3><i class="fas fa-chart-line me-2"></i>Transaction History</h3>
+            <div class="date-filters">
+              <div class="filter-item">
+                <label>From</label>
+                <input type="date" id="fromDate" class="form-control" />
+              </div>
+              <div class="filter-item">
+                <label>To</label>
+                <input type="date" id="toDate" class="form-control" />
+              </div>
+            </div>
+            <div class="history-actions">
+              <button class="btn btn-outline-primary" onclick="filterHistory()">
+                <i class="fas fa-filter me-2"></i>Filter
+              </button>
+              <button class="btn btn-outline-danger" onclick="downloadPDF()">
+                <i class="fas fa-file-pdf me-2"></i>PDF
+              </button>
+            </div>
           </div>
-          <div class="col-md-6">
-            <h4>Debited</h4>
-            <table class="table table-bordered table-striped">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Reason</th>
-                  <th>Amount</th>
-                </tr>
-              </thead>
-              <tbody id="debitBody"></tbody>
-            </table>
+
+          <div class="history-tables">
+            <div class="history-table">
+              <h4>
+                <i class="fas fa-arrow-down text-success me-2"></i>Credited
+              </h4>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Reason</th>
+                      <th>Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody id="creditBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="history-table">
+              <h4><i class="fas fa-arrow-up text-warning me-2"></i>Debited</h4>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Reason</th>
+                      <th>Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody id="debitBody"></tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="text-center">
-        <button class="btn btn-danger mt-3" onclick="clearAll()">
-          Clear Everything
-        </button>
+        <div class="text-center mt-4">
+          <button class="btn btn-danger" onclick="showClearConfirmation()">
+            <i class="fas fa-trash-alt me-2"></i>Clear All Data
+          </button>
+        </div>
       </div>
     </div>
 
-    <!-- jsPDF -->
+    <!-- Toast Container -->
+    <div
+      id="toastContainer"
+      class="toast-container position-fixed bottom-0 end-0 p-3"
+    ></div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirm Clear</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to clear all data? This cannot be undone.
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button type="button" class="btn btn-danger" id="confirmClear">
+              Clear All
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="script.js"></script>
   </body>
