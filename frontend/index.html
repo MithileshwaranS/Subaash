@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Money Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Bootstrap 5 CSS CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="loginpage" class="section text-center">
+      <h2>Login</h2>
+      <input
+        id="nameBox"
+        class="form-control my-2"
+        placeholder="Enter your name"
+      />
+      <button class="btn btn-primary" onclick="login()">Login</button>
+    </div>
+
+    <div id="appArea" class="section" style="display: none">
+      <h2 class="text-center">Hello <span id="usernameDisplay"></span>!</h2>
+
+      <div class="alert alert-info text-center">
+        <p class="mb-1">
+          Your Balance is: <strong>Rs.<span id="balance">0</span></strong>
+        </p>
+        <p class="mb-0">
+          You spent: <strong>Rs.<span id="spent">0</span></strong>
+        </p>
+      </div>
+
+      <div class="d-flex flex-wrap justify-content-center gap-2 mb-3">
+        <button class="btn btn-success" onclick="creditbtn()">Credit</button>
+        <button class="btn btn-warning text-white" onclick="debitbtn()">
+          Debit
+        </button>
+        <button class="btn btn-secondary" onclick="showHistory()">
+          View History
+        </button>
+      </div>
+
+      <div id="creditbtn" class="card p-3 mb-3">
+        <input id="cashIndate" type="date" class="form-control mb-2" />
+        <input id="cashInReason" placeholder="Why?" class="form-control mb-2" />
+        <input
+          id="cashInAmount"
+          placeholder="Amount"
+          class="form-control mb-2"
+          type="number"
+        />
+        <button class="btn btn-success" onclick="addMoney()">Add</button>
+      </div>
+
+      <div id="debitbtn" class="card p-3 mb-3">
+        <input id="cashOutdate" type="date" class="form-control mb-2" />
+        <input
+          id="cashOutReason"
+          placeholder="Why?"
+          class="form-control mb-2"
+        />
+        <input
+          id="cashOutAmount"
+          placeholder="Amount"
+          class="form-control mb-2"
+          type="number"
+        />
+        <button class="btn btn-warning text-white" onclick="spendMoney()">
+          Spend
+        </button>
+      </div>
+
+      <div id="historySection" style="display: none">
+        <h3>History</h3>
+        <div class="row g-2 align-items-end">
+          <div class="col-md-6">
+            <label for="fromDate">From:</label>
+            <input type="date" id="fromDate" class="form-control" />
+          </div>
+          <div class="col-md-6">
+            <label for="toDate">To:</label>
+            <input type="date" id="toDate" class="form-control" />
+          </div>
+        </div>
+        <div class="my-3">
+          <button
+            class="btn btn-outline-primary me-2"
+            onclick="filterHistory()"
+          >
+            Filter
+          </button>
+          <button class="btn btn-outline-danger" onclick="downloadPDF()">
+            Download PDF
+          </button>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <h4>Credited</h4>
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Reason</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody id="creditBody"></tbody>
+            </table>
+          </div>
+          <div class="col-md-6">
+            <h4>Debited</h4>
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Reason</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody id="debitBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <button class="btn btn-danger mt-3" onclick="clearAll()">
+          Clear Everything
+        </button>
+      </div>
+    </div>
+
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

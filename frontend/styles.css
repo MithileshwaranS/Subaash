@@ -1,0 +1,19 @@
+body {
+  background: #f8f9fa;
+}
+
+.section {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+#creditbtn,
+#debitbtn {
+  display: none;
+}
+
+table th,
+table td {
+  vertical-align: middle;
+}
